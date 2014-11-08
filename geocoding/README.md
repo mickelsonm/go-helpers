@@ -4,6 +4,7 @@ Geocoding Helper
 Lookups are done using an address or latitude/longitude pair.
 
 Address: Just a string of Address, City, State/Province Postal Code
+
 Location: A coordinate struct, which you set Latitude and Longitude.
 
 Example:
