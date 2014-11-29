@@ -8,7 +8,7 @@ Address: Just a string of Address, City, State/Province Postal Code
 Location: A coordinate struct, which you set Latitude and Longitude.
 
 Example:
-
+```go
 	package main
 
 	import(
@@ -20,7 +20,7 @@ Example:
 	func main(){
 		lookup := geocoding.Lookup{
 			//address based lookup
-			Address: "309 South Barstow Street, Eau Claire, WI 54701",
+			//Address: "309 South Barstow Street, Eau Claire, WI 54701",
 			//latitude/longitude-based lookup
 			Location: {
 				Latitude: 123.45,
@@ -34,3 +34,4 @@ Example:
 		}
 		log.Println(results)
 	}
+```
