@@ -4,7 +4,7 @@ Yahoo Finance Helper
 This was a very basic attempt at reading from the Yahoo Finance API.
 
 Example Usage:
-
+```go
 	package main
 
 	import (
@@ -21,5 +21,5 @@ Example Usage:
 		}
 		fmt.Printf("%+v\n", quotes)
 	}
-
+```
 Note: There's more information available in the response, but not all have been implemented.
