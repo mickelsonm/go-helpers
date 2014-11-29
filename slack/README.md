@@ -4,7 +4,7 @@ Slack Helper
 This is a pretty basic slack notification helper. When I wrote it, its purpose was for quick and dirty real-time debugging.
 
 Example:
-
+```go
 	package main
 
 	import(
@@ -26,3 +26,4 @@ Example:
 		//send returns nil on success and error if there is one that comes up
 		msg.Send()
 	}
+```
