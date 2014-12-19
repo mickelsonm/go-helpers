@@ -21,7 +21,7 @@ Example:
 			 //username can also be a service name
 			Username: "matt",
 			 //text is the message you want to be displayed
-			Text: "Yo...you're servers be crashing yo!"
+			Text: "Yo...your servers be crashing yo!"
 		}
 		//send returns nil on success and error if there is one that comes up
 		msg.Send()
