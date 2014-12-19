@@ -1,4 +1,4 @@
 go-helpers
 ==========
 
-Helpers that I have written using the Go language.
+Helpers that I have wrote using the Go language.
