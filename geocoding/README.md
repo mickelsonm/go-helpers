@@ -25,7 +25,7 @@ Example:
 			Location: &geocoding.Point{
 				Latitude: 123.45,
 				Longitude: 123.45,
-			}
+			},
 		}
 		results, err := lookup.Search()
 		if err != nil{
