@@ -22,7 +22,7 @@ Example:
 			//address based lookup
 			//Address: "309 South Barstow Street, Eau Claire, WI 54701",
 			//latitude/longitude-based lookup
-			Location: {
+			Location: &geocoding.Point{
 				Latitude: 123.45,
 				Longitude: 123.45,
 			}
