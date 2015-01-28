@@ -23,7 +23,7 @@ Example usage:
 		//we're going to use a Go web framework called Gin
 		g := gin.Default()
 
-		//this is our resful api endpoint/service link, which will give the user a json format
+		//this is our restful api endpoint/service link, which will give the user a json format
 		//for the Hacker News RSS feed
 		g.GET("/hackernews", func(c *gin.Context) {
 			//TODO: we could optimize this by implementing some sort of caching mechanism
