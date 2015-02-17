@@ -64,7 +64,7 @@ Example Consumer:
 
 		for {
 			select {
-			case <-consumer.doneChan:
+			case <-consumer.DoneChan:
 
 			}
 		}
