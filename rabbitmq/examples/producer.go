@@ -13,7 +13,7 @@ func main() {
 		RoutingKey: "hacker",
 	}
 
-	prod, err := rabbitmq.NewProducer(exchange)
+	prod, err := rabbitmq.NewProducer(exchange, nil)
 	if err != nil {
 		log.Println(err)
 		return

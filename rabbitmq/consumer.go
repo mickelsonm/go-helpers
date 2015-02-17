@@ -3,7 +3,6 @@ package rabbitmq
 import (
 	"errors"
 	"log"
-	"os"
 
 	"github.com/streadway/amqp"
 )
@@ -32,7 +31,7 @@ func (c *Consumer) Close() error {
 	return nil
 }
 
-func NewConsumer(consumerName string, queueName string, exchange Exchange) (consumer *Consumer, err error) {
+func NewConsumer(consumerName string, queueName string, exchange Exchange, config *Config) (consumer *Consumer, err error) {
 	//validate our parameters
 	if consumerName == "" {
 		err = errors.New("Must give the consumer a name")
@@ -49,13 +48,11 @@ func NewConsumer(consumerName string, queueName string, exchange Exchange) (cons
 		return
 	}
 
-	//setup our connection
-	var conn *amqp.Connection
-	if os.Getenv("AMQP_HOST") != "" {
-		conn, err = amqp.Dial(os.Getenv("AMQP_HOST"))
-	} else {
-		conn, err = amqp.Dial("amqp://localhost:5672")
+	//setup our connection etc
+	if config == nil {
+		config = NewConfig()
 	}
+	conn, err := amqp.Dial(config.GetConnectionString())
 	if err != nil {
 		return
 	}

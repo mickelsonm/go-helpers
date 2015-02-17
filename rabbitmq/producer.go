@@ -2,7 +2,6 @@ package rabbitmq
 
 import (
 	"errors"
-	"os"
 
 	"github.com/streadway/amqp"
 )
@@ -13,7 +12,7 @@ type Producer struct {
 	Exchange Exchange
 }
 
-func NewProducer(exchange Exchange) (producer *Producer, err error) {
+func NewProducer(exchange Exchange, config *Config) (producer *Producer, err error) {
 	if exchange.Type == "" {
 		exchange.Type = "direct"
 	}
@@ -21,12 +20,10 @@ func NewProducer(exchange Exchange) (producer *Producer, err error) {
 		return
 	}
 
-	var conn *amqp.Connection
-	if os.Getenv("AMQP_HOST") != "" {
-		conn, err = amqp.Dial(os.Getenv("AMQP_HOST"))
-	} else {
-		conn, err = amqp.Dial("amqp://localhost:5672")
+	if config == nil {
+		config = NewConfig()
 	}
+	conn, err := amqp.Dial(config.GetConnectionString())
 	if err != nil {
 		return
 	}

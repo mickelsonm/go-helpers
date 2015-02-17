@@ -11,7 +11,7 @@ func main() {
 		Name:       "exchange",
 		RoutingKey: "hacker",
 	}
-	consumer, err := rabbitmq.NewConsumer("simple-consumer", "test-queue", exchange)
+	consumer, err := rabbitmq.NewConsumer("simple-consumer", "test-queue", exchange, nil)
 	if err != nil {
 		log.Println(err)
 		return
