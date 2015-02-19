@@ -2,7 +2,6 @@ package rabbitmq
 
 import (
 	"errors"
-	"log"
 
 	"github.com/streadway/amqp"
 )
@@ -10,9 +9,34 @@ import (
 type Consumer struct {
 	conn     *amqp.Connection
 	channel  *amqp.Channel
+	config   *Config
 	Name     string
 	Exchange Exchange
-	DoneChan chan error
+
+	incomingMessages <-chan amqp.Delivery
+	DoneChan         chan error
+}
+
+type Handler interface {
+	HandleMessage(message *amqp.Delivery) error
+}
+
+type HandlerFunc func(message *amqp.Delivery) error
+
+func (h HandlerFunc) HandleMessage(m *amqp.Delivery) error {
+	return h(m)
+}
+
+func (c *Consumer) AddHandler(handler Handler) {
+	go c.handlerLoop(handler)
+}
+
+func (c *Consumer) handlerLoop(handler Handler) {
+	for msg := range c.incomingMessages {
+		handler.HandleMessage(&msg)
+		msg.Ack(false)
+	}
+	c.DoneChan <- nil
 }
 
 func (c *Consumer) Close() error {
@@ -32,26 +56,27 @@ func (c *Consumer) Close() error {
 }
 
 func NewConsumer(consumerName string, queueName string, exchange Exchange, config *Config) (consumer *Consumer, err error) {
-	//validate our parameters
 	if consumerName == "" {
 		err = errors.New("Must give the consumer a name")
 		return
 	}
 	if queueName == "" {
-		err = errors.New("Must specify the queue name")
+		err = errors.New("Must give the queue name.")
 		return
 	}
-	if exchange.Type == "" {
-		exchange.Type = "direct"
+	if len(queueName) > 255 {
+		err = errors.New("Must give a queue name that contains 1-255 characters.")
+		return
 	}
+
 	if err = exchange.Validate(); err != nil {
 		return
 	}
 
-	//setup our connection etc
 	if config == nil {
 		config = NewConfig()
 	}
+
 	conn, err := amqp.Dial(config.GetConnectionString())
 	if err != nil {
 		return
@@ -99,9 +124,9 @@ func NewConsumer(consumerName string, queueName string, exchange Exchange, confi
 	}
 
 	//setup the deliverables
-	var deliveries <-chan amqp.Delivery
+	var messages <-chan amqp.Delivery
 
-	if deliveries, err = channel.Consume(
+	if messages, err = channel.Consume(
 		queue.Name,   //queue name
 		consumerName, //consumer name
 		false,        //auto acknowledge
@@ -115,19 +140,11 @@ func NewConsumer(consumerName string, queueName string, exchange Exchange, confi
 
 	consumer = new(Consumer)
 	consumer.Name = consumerName
+	consumer.config = config
 	consumer.conn = conn
 	consumer.channel = channel
 	consumer.Exchange = exchange
-
-	go deliveryHandler(deliveries, consumer.DoneChan)
+	consumer.incomingMessages = messages
 
 	return
-}
-
-func deliveryHandler(deliveries <-chan amqp.Delivery, doneChan chan error) {
-	for d := range deliveries {
-		log.Printf("Got message: %s\n", string(d.Body))
-		d.Ack(false)
-	}
-	doneChan <- nil
 }
