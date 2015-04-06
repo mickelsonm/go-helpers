@@ -15,15 +15,30 @@ Example:
 		slack.SLACK_API = "https://myorg.slack.com/services/hooks/incoming-webhook"
 		slack.SLACK_TOKEN = "MYSECRETTOKEN1234"
 
-		msg := slack.Message{
-			 //channels can be prefixed with a hashtag, but it isn't required
-			Channel: "Debugging",
-			 //username can also be a service name
-			Username: "matt",
-			 //text is the message you want to be displayed
-			Text: "Yo...your servers be crashing yo!"
+		m := slack.Message{
+			Channel:  "random",
+			Username: "Randomness",
+			Text:     "Some guy is testing some new functionality thingy on slack",
 		}
-		//send returns nil on success and error if there is one that comes up
-		msg.Send()
+
+		m.Attachments = append(m.Attachments, slack.Attachment{
+			//Pretext:    "BEDROCK NEWS:",
+			Text:       "Who is Fred Flintstone?",
+			Color:      "#CCC",
+			Fallback:   "This is some fallback text...in case something funny happens.",
+			Title:      "Man this sure is random:",
+			AuthorName: "Barney Rubble Trivia",
+			AuthorIcon: "http://upload.wikimedia.org/wikipedia/en/thumb/a/ad/Fred_Flintstone.png/165px-Fred_Flintstone.png",
+			AuthorLink: "http://upload.wikimedia.org/wikipedia/en/thumb/a/ad/Fred_Flintstone.png/165px-Fred_Flintstone.png",
+			Fields: slack.AttachmentFields{
+				slack.AttachmentField{Title: "#1", Value: "Some guy that used to play in the band."},
+				slack.AttachmentField{Title: "#2", Value: "A fellow that got lost at Wal-Mart."},
+				slack.AttachmentField{Title: "#3", Value: "A girl friend's sister's cousin."},
+				slack.AttachmentField{Title: "#4", Value: "That one guy that sold that guy a car."},
+				slack.AttachmentField{Title: "#5", Value: "Just a caveman."},
+			},
+		})
+
+		m.Send()
 	}
 ```

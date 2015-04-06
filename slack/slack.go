@@ -13,11 +13,34 @@ var (
 	SLACK_TOKEN = "<YOUR TOKEN>"
 )
 
+type AttachmentFields []AttachmentField
+type AttachmentField struct {
+	Title string `json:"title"`
+	Value string `json:"value"`
+	Short bool   `json:"short"`
+}
+
+type Attachments []Attachment
+type Attachment struct {
+	Fallback   string           `json:"fallback"`
+	Color      string           `json:"color,omitempty"`
+	Pretext    string           `json:"pretext,omitempty"`
+	AuthorName string           `json:"author_name,omitempty"`
+	AuthorLink string           `json:"author_link,omitempty"`
+	AuthorIcon string           `json:"author_icon,omitempty"`
+	Title      string           `json:"title,omitempty"`
+	TitleLink  string           `json:"title_link,omitempty"`
+	Text       string           `json:"text"`
+	ImageURL   string           `json:"image_url,omitempty"`
+	Fields     AttachmentFields `json:"fields,omitempty"`
+}
+
 type Message struct {
-	Channel  string `json:"channel"`
-	Username string `json:"username,omitempty"`
-	Text     string `json:"text"`
-	Icon     string `json:"icon_emoji,omitempty"`
+	Channel     string      `json:"channel"`
+	Username    string      `json:"username,omitempty"`
+	Text        string      `json:"text"`
+	Icon        string      `json:"icon_emoji,omitempty"`
+	Attachments Attachments `json:"attachments,omitempty"`
 }
 
 func (m *Message) Send() error {
