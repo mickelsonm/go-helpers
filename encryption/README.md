@@ -3,7 +3,7 @@ Encryption Helper
 
 This helper is setup to handle various forms of encryption and decryption mechanisms out there.
 
-AES Ecryption Example:
+AES Encryption Example:
 ```go
 	package main
 
