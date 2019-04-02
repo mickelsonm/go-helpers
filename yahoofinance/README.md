@@ -1,6 +1,8 @@
 Yahoo Finance Helper
 ==========
 
+This is now DEPRECATED and no longer functional. Still remains as a learning example eh?
+
 This was a very basic attempt at reading from the Yahoo Finance API.
 
 Example Usage:
